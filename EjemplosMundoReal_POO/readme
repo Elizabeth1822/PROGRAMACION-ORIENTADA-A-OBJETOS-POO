@@ -1,1 +1,92 @@
+# biblioteca.py
 
+# Clase que representa un libro
+class Libro:
+    def __init__(self, titulo, autor):
+        self.titulo = titulo
+        self.autor = autor
+        self.prestado = False
+
+    def prestar(self):
+        if not self.prestado:
+            self.prestado = True
+            print(f"Libro '{self.titulo}' prestado con éxito.")
+        else:
+            print(f"El libro '{self.titulo}' ya está prestado.")
+
+    def devolver(self):
+        if self.prestado:
+            self.prestado = False
+            print(f"Libro '{self.titulo}' devuelto con éxito.")
+        else:
+            print(f"El libro '{self.titulo}' no está prestado.")
+
+    def __str__(self):
+        estado = "Prestado" if self.prestado else "Disponible"
+        return f"{self.titulo} de {self.autor} - {estado}"
+
+
+# Clase que representa al usuario de la biblioteca
+class Usuario:
+    def __init__(self, nombre):
+        self.nombre = nombre
+        self.libros_prestados = []
+
+    def tomar_libro(self, libro):
+        if not libro.prestado:
+            libro.prestar()
+            self.libros_prestados.append(libro)
+        else:
+            print(f"{self.nombre} no pudo tomar el libro '{libro.titulo}' porque ya está prestado.")
+
+    def devolver_libro(self, libro):
+        if libro in self.libros_prestados:
+            libro.devolver()
+            self.libros_prestados.remove(libro)
+        else:
+            print(f"{self.nombre} no tiene prestado el libro '{libro.titulo}'.")
+
+    def mostrar_libros(self):
+        print(f"\nLibros prestados a {self.nombre}:")
+        if not self.libros_prestados:
+            print("Ninguno.")
+        else:
+            for libro in self.libros_prestados:
+                print(f"- {libro.titulo}")
+
+
+# Programa principal
+if __name__ == "__main__":
+    # Crear libros
+    libro1 = Libro("Cien años de soledad", "Gabriel García Márquez")
+    libro2 = Libro("Don Quijote de la Mancha", "Miguel de Cervantes")
+    libro3 = Libro("El Principito", "Antoine de Saint-Exupéry")
+
+    # Mostrar estado inicial
+    print("📚 Estado inicial de los libros:")
+    print(libro1)
+    print(libro2)
+    print(libro3)
+
+    # Crear un usuario
+    usuario = Usuario("Andrea")
+
+    # Préstamos
+    usuario.tomar_libro(libro1)
+    usuario.tomar_libro(libro2)
+
+    # Intentar tomar un libro ya prestado
+    otro_usuario = Usuario("Luis")
+    otro_usuario.tomar_libro(libro1)
+
+    # Mostrar libros prestados a Andrea
+    usuario.mostrar_libros()
+
+    # Devolver un libro
+    usuario.devolver_libro(libro1)
+
+    # Mostrar estado final de los libros
+    print("\n📚 Estado final de los libros:")
+    print(libro1)
+    print(libro2)
+    print(libro3)
