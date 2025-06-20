@@ -1,4 +1,4 @@
-# Cálculo del promedio semanal del clima usando funciones (Programación Tradicional)
+# Cálculo del promedio semanal del clima usando funciones (Programación Tradicional)   
 
 def pedir_datos():
     temperaturas = []
