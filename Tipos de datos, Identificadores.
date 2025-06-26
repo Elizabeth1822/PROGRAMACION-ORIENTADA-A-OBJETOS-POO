@@ -1,0 +1,30 @@
+# Programa para calcular el área de un triángulo
+# Usa tipos de datos: float, int, str, bool
+# El usuario ingresa la base y la altura, y el programa calcula el área.
+# También indica si el área es mayor a 50 unidades cuadradas.
+
+def calcular_area_triangulo(base: float, altura: float) -> float:
+    """
+    Calcula el área de un triángulo usando la fórmula:
+    (base * altura) / 2
+    """
+    return (base * altura) / 2
+
+# Solicitar el nombre del usuario
+nombre_usuario: str = input("¿Cuál es tu nombre? ")
+
+# Solicitar los datos del triángulo
+base_triangulo: float = float(input("Ingresa la base del triángulo (en cm): "))
+altura_triangulo: float = float(input("Ingresa la altura del triángulo (en cm): "))
+
+# Calcular el área
+area: float = calcular_area_triangulo(base_triangulo, altura_triangulo)
+
+# Verificar si el área es mayor a 50
+es_area_grande: bool = area > 50
+
+
+# Mostrar resultados
+print(f"\nHola, {nombre_usuario}!")
+print(f"El área del triángulo es: {area} cm²")
+print("¿El área es mayor a 50 cm²?", es_area_grande)
