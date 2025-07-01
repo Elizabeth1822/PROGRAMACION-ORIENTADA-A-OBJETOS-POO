@@ -44,3 +44,4 @@ print(estudiante_elizabeth.informacion())  # Información del estudiante Elizabe
 
 # Acceso a métodos adicionales de Estudiante
 print(estudiante_elizabeth.obtener_especializacion())  # Especialización de Elizabeth
+
