@@ -1,10 +1,46 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<module type="PYTHON_MODULE" version="4">
-  <component name="NewModuleRootManager">
-    <content url="file://$MODULE_DIR$">
-      <excludeFolder url="file://$MODULE_DIR$/.venv" />
-    </content>
-    <orderEntry type="jdk" jdkName="Python 3.13 (PythonProject) (3)" jdkType="Python SDK" />
-    <orderEntry type="sourceFolder" forTests="false" />
-  </component>
-</module>
+class Carrera:
+    def __init__(self, nombre, años):
+        self.__nombre = nombre  # Atributo encapsulado (privado)
+        self.__años = años  # Atributo encapsulado (privado)
+
+    # Métodos para acceder a los atributos privados (encapsulación)
+    def obtener_nombre(self):
+        return self.__nombre
+
+    def obtener_años(self):
+        return self.__años
+
+    def informacion(self):
+        return f"Carrera: {self.__nombre}, Duración: {self.__años} años"
+
+# Clase derivada Estudiante (herencia)
+class Estudiante(Carrera):
+    def __init__(self, nombre, años, nombre_estudiante, especializacion, universidad):
+        # Llamada al constructor de la clase base (Carrera)
+        super().__init__(nombre, años)
+        self.nombre_estudiante = nombre_estudiante
+        self.especializacion = especializacion
+        self.universidad = universidad  # Atributo adicional para la universidad
+
+    # Sobrescritura del método informacion (Polimorfismo)
+    def informacion(self):
+        return f"Estudiante: {self.nombre_estudiante}, Especialización: {self.especializacion}, Carrera: {self.obtener_nombre()}, Duración: {self.obtener_años()} años, Universidad: {self.universidad}"
+
+    # Método adicional específico para Estudiante
+    def obtener_especializacion(self):
+        return f"Especialización en: {self.especializacion}"
+
+# Ejemplo de uso:
+
+# Creación de instancias de las clases
+carrera_ti = Carrera("Ingeniería en Tecnología de la Información", 5)
+
+# Creación del estudiante Elizabeth
+estudiante_elizabeth = Estudiante("Ingeniería en Tecnología de la Información", 5, "Elizabeth", "Desarrollo de Software", "Universidad UEA")
+
+# Llamada a métodos
+print(carrera_ti.informacion())  # Información de la carrera
+print(estudiante_elizabeth.informacion())  # Información del estudiante Elizabeth
+
+# Acceso a métodos adicionales de Estudiante
+print(estudiante_elizabeth.obtener_especializacion())  # Especialización de Elizabeth
