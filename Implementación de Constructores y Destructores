@@ -1,0 +1,64 @@
+class CuentaBancaria:
+    def __init__(self, titular, saldo_inicial=0):
+        """
+        Constructor de la clase CuentaBancaria. Inicializa el titular de la cuenta y el saldo.
+        
+        :param titular: Nombre del titular de la cuenta.
+        :param saldo_inicial: Saldo inicial de la cuenta, por defecto 0.
+        """
+        self.titular = titular
+        self.saldo = saldo_inicial
+        print(f"Cuenta bancaria creada para {self.titular} con saldo inicial de {self.saldo}.")
+
+    def depositar(self, cantidad):
+        """
+        Método para realizar un depósito en la cuenta.
+        
+        :param cantidad: Monto a depositar en la cuenta.
+        """
+        if cantidad > 0:
+            self.saldo += cantidad
+            print(f"Depósito de {cantidad} realizado. Saldo actual: {self.saldo}.")
+        else:
+            print("El depósito debe ser una cantidad positiva.")
+
+    def retirar(self, cantidad):
+        """
+        Método para realizar un retiro de la cuenta.
+        
+        :param cantidad: Monto a retirar de la cuenta.
+        """
+        if cantidad > 0:
+            if cantidad <= self.saldo:
+                self.saldo -= cantidad
+                print(f"Retiro de {cantidad} realizado. Saldo actual: {self.saldo}.")
+            else:
+                print("Saldo insuficiente para realizar el retiro.")
+        else:
+            print("El retiro debe ser una cantidad positiva.")
+
+    def mostrar_saldo(self):
+        """Método para mostrar el saldo actual de la cuenta."""
+        print(f"Saldo actual de la cuenta de {self.titular}: {self.saldo}.")
+
+    def __del__(self):
+        """
+        Destructor de la clase CuentaBancaria. Este método se llama cuando el objeto se destruye.
+        
+        Aquí se imprime un mensaje indicando que la cuenta ha sido cerrada.
+        """
+        print(f"La cuenta de {self.titular} ha sido cerrada.")
+        
+
+# Ejemplo de uso de la clase
+if __name__ == "__main__":
+    # Crear una nueva cuenta bancaria con un saldo inicial de 1000 para María Elizabeth
+    cuenta = CuentaBancaria("María Elizabeth", 1000)
+    
+    # Realizar algunas operaciones en la cuenta
+    cuenta.depositar(500)
+    cuenta.retirar(200)
+    cuenta.mostrar_saldo()
+    
+    # Cerrar la cuenta explícitamente
+    del cuenta
