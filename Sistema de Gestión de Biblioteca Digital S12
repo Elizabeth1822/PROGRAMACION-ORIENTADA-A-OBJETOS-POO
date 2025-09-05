@@ -1,0 +1,74 @@
+import json, os
+
+class Libro:
+    def __init__(self, titulo, autor, categoria, isbn, disponible=True):
+        self.info = (titulo, autor)
+        self.categoria = categoria
+        self.isbn = isbn
+        self.disponible = disponible
+    def __str__(self):
+        return f"[{self.isbn}] {self.info[0]} - {self.info[1]} ({self.categoria}) - {'Disponible' if self.disponible else 'Prestado'}"
+
+class Usuario:
+    def __init__(self, nombre, user_id, libros=None):
+        self.nombre = nombre
+        self.user_id = user_id
+        self.libros_prestados = libros if libros else []
+
+class Biblioteca:
+    def __init__(self, archivo="biblioteca.json"):
+        self.archivo = archivo
+        self.libros = {}
+        self.usuarios = {}
+        if os.path.exists(archivo):
+            self.cargar()
+        else:
+            self.guardar()
+
+    def cargar(self):
+        with open(self.archivo, "r", encoding="utf-8") as f:
+            datos = json.load(f)
+            self.libros = {isbn: Libro(d["titulo"], d["autor"], d["categoria"], isbn, d["disponible"]) for isbn, d in datos.get("libros", {}).items()}
+            self.usuarios = {uid: Usuario(d["nombre"], uid, d["libros_prestados"]) for uid, d in datos.get("usuarios", {}).items()}
+
+    def guardar(self):
+        datos = {
+            "libros": {isbn: {"titulo": l.info[0], "autor": l.info[1], "categoria": l.categoria, "disponible": l.disponible} for isbn, l in self.libros.items()},
+            "usuarios": {uid: {"nombre": u.nombre, "libros_prestados": u.libros_prestados} for uid, u in self.usuarios.items()}
+        }
+        with open(self.archivo, "w", encoding="utf-8") as f:
+            json.dump(datos, f, indent=4, ensure_ascii=False)
+
+    def añadir_libro(self, libro):
+        if libro.isbn in self.libros: return print("Libro ya existe")
+        self.libros[libro.isbn] = libro; self.guardar()
+    def registrar_usuario(self, usuario):
+        if usuario.user_id in self.usuarios: return print("Usuario ya existe")
+        self.usuarios[usuario.user_id] = usuario; self.guardar()
+    def prestar_libro(self, uid, isbn):
+        if uid not in self.usuarios or isbn not in self.libros or not self.libros[isbn].disponible: return print("Error préstamo")
+        self.libros[isbn].disponible = False
+        self.usuarios[uid].libros_prestados.append(isbn)
+        self.guardar()
+    def devolver_libro(self, uid, isbn):
+        if uid in self.usuarios and isbn in self.usuarios[uid].libros_prestados:
+            self.libros[isbn].disponible = True
+            self.usuarios[uid].libros_prestados.remove(isbn)
+            self.guardar()
+    def buscar(self, criterio, valor):
+        return [str(l) for l in self.libros.values() if valor.lower() in (l.info[0].lower() if criterio=="titulo" else l.info[1].lower() if criterio=="autor" else l.categoria.lower())]
+    def listar_prestados_usuario(self, uid):
+        return [str(self.libros[i]) for i in self.usuarios[uid].libros_prestados] if uid in self.usuarios else []
+
+# =============================
+# DEMO
+# =============================
+if __name__ == "__main__":
+    b = Biblioteca()
+    b.añadir_libro(Libro("Álgebra Lineal", "Gilbert Strang", "Matemáticas", "2001"))
+    b.añadir_libro(Libro("Química General", "Raymond Chang", "Química", "2002"))
+    b.añadir_libro(Libro("Introducción a la Psicología", "James W. Kalat", "Psicología", "2003"))
+    b.registrar_usuario(Usuario("Maria Gonzalez","U001"))
+    b.prestar_libro("U001","2001")
+    print("\nBúsqueda categoría 'Química':", b.buscar("categoria","Química"))
+    print("\nLibros prestados Maria Gonzalez:", b.listar_prestados_usuario("U001"))
